@@ -1,4 +1,15 @@
 <Solution>
+  <Folder Name="/Bot/">
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Agent/DaisiBot.Agent.csproj" />
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Core/DaisiBot.Core.csproj" />
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Data/DaisiBot.Data.csproj" />
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Maui/DaisiBot.Maui.csproj">
+      <Deploy Solution="Debug|*" />
+    </Project>
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Shared.UI/DaisiBot.Shared.UI.csproj" />
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Tui/DaisiBot.Tui.csproj" />
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Web/DaisiBot.Web.csproj" />
+  </Folder>
   <Folder Name="/Hosts/">
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Console/Daisi.Host.Console.csproj" />
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Core/Daisi.Host.Core.csproj" />
