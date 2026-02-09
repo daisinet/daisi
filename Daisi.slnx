@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Hosts/">
+    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Console/Daisi.Host.Console.csproj" />
+    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Core/Daisi.Host.Core.csproj" />
+    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Maui/Daisi.Host.Maui.csproj" />
+  </Folder>
+  <Folder Name="/Manager/">
+    <Project Path="../daisi-manager-dotnet/Daisi.Manager.Maui/Daisi.Manager.Maui.csproj" />
+    <Project Path="../daisi-manager-dotnet/Daisi.Manager.Shared/Daisi.Manager.Shared.csproj" />
+    <Project Path="../daisi-manager-dotnet/Daisi.Manager.Web/Daisi.Manager.Web.csproj" />
+  </Folder>
+  <Folder Name="/Orc/">
+    <Project Path="../daisi-orc-dotnet/Daisi.Functions.Cosmo/Daisi.Functions.CosmoDb.csproj" />
+    <Project Path="../daisi-orc-dotnet/Daisi.Orc.Core/Daisi.Orc.Core.csproj" />
+    <Project Path="../daisi-orc-dotnet/Daisi.Orc.Grpc/Daisi.Orc.Grpc.csproj" />
+    <Project Path="../daisi-orc-dotnet/Daisi.Orc.Tests/Daisi.Orc.Tests.csproj" />
+  </Folder>
+  <Folder Name="/SDK/">
+    <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Razor/Daisi.SDK.Razor.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Tests/Daisi.SDK.Tests.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Web/Daisi.SDK.Web.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.SDK/Daisi.SDK.csproj" />
+  </Folder>
+</Solution>
