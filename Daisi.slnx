@@ -32,6 +32,9 @@
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Web/Daisi.SDK.Web.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK/Daisi.SDK.csproj" />
   </Folder>
+  <Folder Name="/SDK/Examples/">
+    <Project Path="../daisi-sdk-dotnet/Examples/Daisi.Console.Chat/Daisi.Console.Chat.csproj" />
+  </Folder>
   <Folder Name="/Tools/">
     <Project Path="../daisi-tools-dotnet/Daisi.Tools.csproj" />
     <Project Path="../daisi-tools-dotnet/Daisi.Tools.Tests/Daisi.Tools.Tests.csproj" />
