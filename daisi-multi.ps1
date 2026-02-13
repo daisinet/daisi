@@ -490,7 +490,16 @@ function Invoke-PrCreate {
             Write-Host "[$repoName] Creating PR..." -ForegroundColor Gray
             $output = gh pr create --base $Base --head $currentBranch --title $prTitle --body $prBody 2>&1
             if ($LASTEXITCODE -eq 0) {
-                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "PR created: $output" }
+                # Enable auto-merge so the PR completes automatically
+                $prUrl = "$output".Trim()
+                $mergeFlag = "--$MergeStrategy"
+                $autoOutput = gh pr merge $prUrl --auto $mergeFlag --delete-branch 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "PR created with auto-merge: $prUrl" }
+                }
+                else {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "PR created (auto-merge failed: $autoOutput): $prUrl" }
+                }
             }
             else {
                 $outputStr = "$output"
@@ -617,7 +626,15 @@ function Invoke-PrDevToMain {
             Write-Host "[$repoName] Creating PR dev -> $mainBranch..." -ForegroundColor Gray
             $output = gh pr create --base $mainBranch --head dev --title $prTitle --body $prBody 2>&1
             if ($LASTEXITCODE -eq 0) {
-                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "PR created: $output" }
+                $prUrl = "$output".Trim()
+                $mergeFlag = "--$MergeStrategy"
+                $autoOutput = gh pr merge $prUrl --auto $mergeFlag 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "PR created with auto-merge: $prUrl" }
+                }
+                else {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "PR created (auto-merge failed: $autoOutput): $prUrl" }
+                }
             }
             else {
                 $outputStr = "$output"
