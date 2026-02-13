@@ -738,8 +738,30 @@ function Invoke-WorktreeAdd {
     Show-Summary $results
 
     if (-not $DryRun) {
+        $failCount = @($results | Where-Object { $_.Status -eq 'FAIL' }).Count
+        if ($failCount -gt 0) {
+            Write-Host "Worktree creation had failures - skipping Claude launch." -ForegroundColor Yellow
+            return
+        }
+
         Write-Host "Worktree ready at: $worktreeRoot" -ForegroundColor Green
-        Write-Host "Open a new Claude console there to work on '$Name'" -ForegroundColor Green
+
+        # Launch Claude Code in a new Windows Terminal tab
+        try {
+            $quotedPath = '"' + $worktreeRoot + '"'
+            Start-Process wt -ArgumentList "-d", $quotedPath, "claude" -ErrorAction Stop
+            Write-Host "Launched Claude Code in new terminal at $worktreeRoot" -ForegroundColor Green
+        }
+        catch {
+            # Fallback: open a new PowerShell window with claude
+            try {
+                Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$worktreeRoot'; claude"
+                Write-Host "Launched Claude Code in new PowerShell window at $worktreeRoot" -ForegroundColor Green
+            }
+            catch {
+                Write-Host "Could not auto-launch terminal. Open Claude manually in: $worktreeRoot" -ForegroundColor Yellow
+            }
+        }
         Write-Host ''
     }
 }
@@ -842,14 +864,14 @@ switch ($Command) {
     }
     'branch' {
         if (-not $Name) {
-            Write-ColorLine 'ERROR: branch command requires a name. Usage: .\daisi-multi.ps1 branch <name>' Red
+            Write-ColorLine "ERROR: branch command requires a name. Usage: .\daisi-multi.ps1 branch [name]" Red
             exit 1
         }
         Invoke-Branch
     }
     'checkout' {
         if (-not $Name) {
-            Write-ColorLine 'ERROR: checkout command requires a name. Usage: .\daisi-multi.ps1 checkout <name>' Red
+            Write-ColorLine "ERROR: checkout command requires a name. Usage: .\daisi-multi.ps1 checkout [name]" Red
             exit 1
         }
         Invoke-Checkout
@@ -871,14 +893,14 @@ switch ($Command) {
     }
     'worktree-add' {
         if (-not $Name) {
-            Write-ColorLine 'ERROR: worktree-add requires a branch name. Usage: .\daisi-multi.ps1 worktree-add <branch>' Red
+            Write-ColorLine "ERROR: worktree-add requires a branch name. Usage: .\daisi-multi.ps1 worktree-add [branch]" Red
             exit 1
         }
         Invoke-WorktreeAdd
     }
     'worktree-remove' {
         if (-not $Name) {
-            Write-ColorLine 'ERROR: worktree-remove requires a branch name. Usage: .\daisi-multi.ps1 worktree-remove <branch>' Red
+            Write-ColorLine "ERROR: worktree-remove requires a branch name. Usage: .\daisi-multi.ps1 worktree-remove [branch]" Red
             exit 1
         }
         Invoke-WorktreeRemove
