@@ -4,19 +4,29 @@
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Core/DaisiBot.Core.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Data/DaisiBot.Data.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Maui/DaisiBot.Maui.csproj">
-      <Deploy Solution="Debug|*" />
+      <Deploy />
     </Project>
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Shared.UI/DaisiBot.Shared.UI.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Tui/DaisiBot.Tui.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Web/DaisiBot.Web.csproj" />
   </Folder>
+  <Folder Name="/Drive/">
+    <Project Path="../daisi-drive-dotnet/Daisi.Drive.Core/Daisi.Drive.Core.csproj" />
+    <Project Path="../daisi-drive-dotnet/Daisi.Drive.Service/Daisi.Drive.Service.csproj" />
+    <Project Path="../daisi-drive-dotnet/Daisi.Drive.Tests/Daisi.Drive.Tests.csproj" />
+    <Project Path="../daisi-drive-dotnet/Daisi.Drive/Daisi.Drive.csproj" />
+  </Folder>
   <Folder Name="/Hosts/">
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Console/Daisi.Host.Console.csproj" />
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Core/Daisi.Host.Core.csproj" />
-    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Maui/Daisi.Host.Maui.csproj" />
+    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Maui/Daisi.Host.Maui.csproj">
+      <Deploy />
+    </Project>
   </Folder>
   <Folder Name="/Manager/">
-    <Project Path="../daisi-manager-dotnet/Daisi.Manager.Maui/Daisi.Manager.Maui.csproj" />
+    <Project Path="../daisi-manager-dotnet/Daisi.Manager.Maui/Daisi.Manager.Maui.csproj">
+      <Deploy />
+    </Project>
     <Project Path="../daisi-manager-dotnet/Daisi.Manager.Shared/Daisi.Manager.Shared.csproj" />
     <Project Path="../daisi-manager-dotnet/Daisi.Manager.Web/Daisi.Manager.Web.csproj" />
   </Folder>
