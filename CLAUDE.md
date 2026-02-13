@@ -43,6 +43,11 @@ Use `daisi\daisi-multi.ps1` for any operation that should apply across multiple 
 - **Releasing**: use `pr-dev-to-main` to promote dev to main across all repos.
 - **Cleaning up**: use `worktree-remove <branch>` after a feature is merged to clean up the worktree directory.
 
+### User Shortcuts
+
+- **"ship to dev"** — For each repo that has uncommitted changes: stage and commit with a descriptive message, then run `push` across all repos, then run `pr-create` (which auto-merges). This ships the current feature branch back to dev.
+- **"closeout this feature"** — Do everything in "ship to dev", then determine the current branch name, run `worktree-remove <branch>` from the main `C:\repos\daisinet` directory to clean up, and close the console window. Since the worktree-remove must run from the main directory (not the worktree itself), use: `powershell.exe -Command "Start-Process powershell -ArgumentList '-Command', 'Set-Location C:\repos\daisinet; powershell -ExecutionPolicy Bypass -File C:\repos\daisinet\daisi\daisi-multi.ps1 worktree-remove <branch>'"` then exit the current session.
+
 ### Important flags
 
 - **`-DryRun`**: Always use this first for mutating commands (`branch`, `push`, `pr-create`, `pr-merge`, `pr-dev-to-main`) to preview what will happen before executing.
