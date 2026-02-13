@@ -856,17 +856,14 @@ function Invoke-WorktreeRemove {
         }
     }
 
-    # Clean up the worktree root directory if empty
+    # Clean up the worktree root directory and any leftover files
     if (-not $DryRun -and (Test-Path $worktreeRoot)) {
-        $remaining = Get-ChildItem -Path $worktreeRoot -Force
-        # Only CLAUDE.md and daisi folder (script copy) might remain
-        $nonCopied = $remaining | Where-Object { $_.Name -ne 'CLAUDE.md' -and $_.Name -ne 'daisi' }
-        if (-not $nonCopied) {
-            Remove-Item $worktreeRoot -Recurse -Force
-            Write-Host "Cleaned up worktree root: $worktreeRoot" -ForegroundColor Green
+        Remove-Item $worktreeRoot -Recurse -Force -ErrorAction SilentlyContinue
+        if (Test-Path $worktreeRoot) {
+            Write-Host "Warning: Could not fully remove $worktreeRoot" -ForegroundColor Yellow
         }
         else {
-            Write-Host "Worktree root still has files, not removing: $worktreeRoot" -ForegroundColor Yellow
+            Write-Host "Cleaned up worktree root: $worktreeRoot" -ForegroundColor Green
         }
     }
 
