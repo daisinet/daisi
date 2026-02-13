@@ -557,7 +557,13 @@ function Invoke-PrMerge {
 
             Write-Host "[$repoName] Merging PR #$prNumber..." -ForegroundColor Gray
             $mergeFlag = "--$MergeStrategy"
-            $output = gh pr merge $prNumber $mergeFlag --delete-branch 2>&1
+            $protectedBranches = @('main', 'master', 'dev')
+            if ($protectedBranches -contains $currentBranch) {
+                $output = gh pr merge $prNumber $mergeFlag 2>&1
+            }
+            else {
+                $output = gh pr merge $prNumber $mergeFlag --delete-branch 2>&1
+            }
             if ($LASTEXITCODE -eq 0) {
                 $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "Merged PR #$prNumber ($MergeStrategy)" }
             }
