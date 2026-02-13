@@ -14,7 +14,7 @@
 
 param(
     [Parameter(Mandatory, Position = 0)]
-    [ValidateSet('status','branch','checkout','pull','push','pr-create','pr-merge','pr-dev-to-main')]
+    [ValidateSet('status','branch','checkout','pull','push','pr-create','pr-merge','pr-dev-to-main','worktree-add','worktree-remove')]
     [string]$Command,
 
     [Parameter(Position = 1)]
@@ -640,6 +640,193 @@ function Invoke-PrDevToMain {
     Show-Summary $results
 }
 
+function Invoke-WorktreeAdd {
+    if (-not $Name) {
+        Write-ColorLine 'ERROR: -Name is required for worktree-add command.' Red
+        return
+    }
+
+    # Sanitize branch name into folder suffix: feature/xyz -> feature-xyz
+    $folderSuffix = $Name -replace '[/\\]', '-'
+    $worktreeRoot = Join-Path (Split-Path $RootDir) "daisinet-$folderSuffix"
+
+    if (Test-Path $worktreeRoot) {
+        Write-ColorLine "ERROR: Worktree directory already exists: $worktreeRoot" Red
+        return
+    }
+
+    $repos = Get-Repos
+    $results = @()
+
+    if ($DryRun) {
+        Write-Host "Worktree root: $worktreeRoot" -ForegroundColor DarkYellow
+        Write-Host ''
+    }
+
+    foreach ($repo in $repos) {
+        $repoName = $repo.Name
+        $repoPath = $repo.FullName
+        $wtPath = Join-Path $worktreeRoot $repoName
+
+        Push-Location $repoPath
+        try {
+            # Check if dev exists for branching
+            $branches = git branch --list 2>$null | ForEach-Object { $_.Trim().TrimStart('* ') }
+            $remoteBranches = git branch -r --list 2>$null | ForEach-Object { $_.Trim() }
+            $branchExists = ($branches -contains $Name) -or ($remoteBranches -contains "origin/$Name")
+
+            if ($DryRun) {
+                if ($branchExists) {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'DRYRUN'; Details = "Would create worktree on existing branch '$Name' at $wtPath" }
+                }
+                else {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'DRYRUN'; Details = "Would create worktree with new branch '$Name' from dev at $wtPath" }
+                }
+                continue
+            }
+
+            if ($branchExists) {
+                # Branch exists — create worktree for it
+                $output = git worktree add $wtPath $Name 2>&1
+            }
+            else {
+                # Create new branch from dev
+                if ($branches -notcontains 'dev') {
+                    $results += [PSCustomObject]@{ Repo = $repoName; Status = 'SKIP'; Details = 'No dev branch to create from' }
+                    continue
+                }
+                git fetch origin dev 2>$null | Out-Null
+                $output = git worktree add -b $Name $wtPath dev 2>&1
+            }
+
+            if ($LASTEXITCODE -eq 0) {
+                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "Worktree at $wtPath ($Name)" }
+            }
+            else {
+                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'FAIL'; Details = "$output" }
+            }
+        }
+        catch {
+            $results += [PSCustomObject]@{ Repo = $repoName; Status = 'FAIL'; Details = $_.Exception.Message }
+        }
+        finally {
+            Pop-Location
+        }
+    }
+
+    # Copy the CLAUDE.md to the worktree root so Claude picks it up there too
+    if (-not $DryRun) {
+        $claudeMd = Join-Path $RootDir 'CLAUDE.md'
+        if (Test-Path $claudeMd) {
+            if (-not (Test-Path $worktreeRoot)) {
+                New-Item -ItemType Directory -Path $worktreeRoot -Force | Out-Null
+            }
+            Copy-Item $claudeMd (Join-Path $worktreeRoot 'CLAUDE.md')
+        }
+        # Copy the daisi-multi.ps1 script directory structure
+        $daisiFolderDst = Join-Path $worktreeRoot 'daisi'
+        if (Test-Path (Join-Path $worktreeRoot 'daisi')) {
+            # daisi repo was added as a worktree — script is already there
+        }
+        else {
+            # daisi wasn't included — copy the script so it's available
+            New-Item -ItemType Directory -Path $daisiFolderDst -Force | Out-Null
+            Copy-Item $PSCommandPath (Join-Path $daisiFolderDst 'daisi-multi.ps1')
+        }
+    }
+
+    Show-Summary $results
+
+    if (-not $DryRun) {
+        Write-Host "Worktree ready at: $worktreeRoot" -ForegroundColor Green
+        Write-Host "Open a new Claude console there to work on '$Name'" -ForegroundColor Green
+        Write-Host ''
+    }
+}
+
+function Invoke-WorktreeRemove {
+    if (-not $Name) {
+        Write-ColorLine 'ERROR: -Name is required for worktree-remove command.' Red
+        return
+    }
+
+    $folderSuffix = $Name -replace '[/\\]', '-'
+    $worktreeRoot = Join-Path (Split-Path $RootDir) "daisinet-$folderSuffix"
+
+    if (-not (Test-Path $worktreeRoot)) {
+        Write-ColorLine "ERROR: Worktree directory not found: $worktreeRoot" Red
+        return
+    }
+
+    $repos = Get-Repos
+    $results = @()
+
+    foreach ($repo in $repos) {
+        $repoName = $repo.Name
+        $repoPath = $repo.FullName
+        $wtPath = Join-Path $worktreeRoot $repoName
+
+        Push-Location $repoPath
+        try {
+            # Check if this worktree exists for this repo
+            $worktrees = git worktree list --porcelain 2>$null
+            $hasWorktree = $false
+            foreach ($line in $worktrees) {
+                if ($line -match "^worktree\s+(.+)$") {
+                    $wtCandidate = $Matches[1].TrimEnd()
+                    # Normalize paths for comparison
+                    $normalizedCandidate = $wtCandidate -replace '[\\/]', '/'
+                    $normalizedTarget = $wtPath -replace '[\\/]', '/'
+                    if ($normalizedCandidate -eq $normalizedTarget) {
+                        $hasWorktree = $true
+                        break
+                    }
+                }
+            }
+
+            if (-not $hasWorktree) {
+                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'SKIP'; Details = 'No worktree found' }
+                continue
+            }
+
+            if ($DryRun) {
+                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'DRYRUN'; Details = "Would remove worktree at $wtPath" }
+                continue
+            }
+
+            $output = git worktree remove $wtPath --force 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'OK'; Details = "Removed worktree ($Name)" }
+            }
+            else {
+                $results += [PSCustomObject]@{ Repo = $repoName; Status = 'FAIL'; Details = "$output" }
+            }
+        }
+        catch {
+            $results += [PSCustomObject]@{ Repo = $repoName; Status = 'FAIL'; Details = $_.Exception.Message }
+        }
+        finally {
+            Pop-Location
+        }
+    }
+
+    # Clean up the worktree root directory if empty
+    if (-not $DryRun -and (Test-Path $worktreeRoot)) {
+        $remaining = Get-ChildItem -Path $worktreeRoot -Force
+        # Only CLAUDE.md and daisi folder (script copy) might remain
+        $nonCopied = $remaining | Where-Object { $_.Name -ne 'CLAUDE.md' -and $_.Name -ne 'daisi' }
+        if (-not $nonCopied) {
+            Remove-Item $worktreeRoot -Recurse -Force
+            Write-Host "Cleaned up worktree root: $worktreeRoot" -ForegroundColor Green
+        }
+        else {
+            Write-Host "Worktree root still has files, not removing: $worktreeRoot" -ForegroundColor Yellow
+        }
+    }
+
+    Show-Summary $results
+}
+
 # ---------------------------------------------------------------------------
 # Main Dispatch
 # ---------------------------------------------------------------------------
@@ -681,5 +868,19 @@ switch ($Command) {
     }
     'pr-dev-to-main' {
         Invoke-PrDevToMain
+    }
+    'worktree-add' {
+        if (-not $Name) {
+            Write-ColorLine 'ERROR: worktree-add requires a branch name. Usage: .\daisi-multi.ps1 worktree-add <branch>' Red
+            exit 1
+        }
+        Invoke-WorktreeAdd
+    }
+    'worktree-remove' {
+        if (-not $Name) {
+            Write-ColorLine 'ERROR: worktree-remove requires a branch name. Usage: .\daisi-multi.ps1 worktree-remove <branch>' Red
+            exit 1
+        }
+        Invoke-WorktreeRemove
     }
 }
