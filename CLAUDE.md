@@ -2,11 +2,10 @@
 
 ## Multi-Repo Structure
 
-This project spans 11 git repos, all under `C:\repos\daisinet`:
+This project spans 10 git repos, all under `C:\repos\daisinet`:
 
 - `daisi` — solution root, shared config
 - `daisi-bot-dotnet` — bot engine and TUI
-- `daisi-dotnet-console-chat` — console chat client
 - `daisi-drive-dotnet` — Drive storage
 - `daisi-hosts-dotnet` — host runtime
 - `daisi-manager-dotnet` — admin/manager web UI

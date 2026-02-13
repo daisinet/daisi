@@ -73,8 +73,10 @@ function Get-MainBranch {
 }
 
 function Get-Repos {
+    $excludedRepos = @('daisi-dotnet-console-chat')
+
     $allRepoDirs = Get-ChildItem -Path $RootDir -Directory | Where-Object {
-        Test-Path (Join-Path $_.FullName '.git')
+        (Test-Path (Join-Path $_.FullName '.git')) -and ($excludedRepos -notcontains $_.Name)
     }
 
     if ($Repos -and $Repos.Count -gt 0) {
