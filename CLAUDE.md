@@ -46,7 +46,7 @@ Use `daisi\daisi-multi.ps1` for any operation that should apply across multiple 
 
 - **"ship to dev"** — For each repo that has uncommitted changes: stage and commit with a descriptive message, then run `push` across all repos, then run `pr-create` (which auto-merges). This ships the current feature branch back to dev.
 - **"closeout this feature"** — Do everything in "ship to dev", then determine the current branch name, run `worktree-remove <branch>` from the main `C:\repos\daisinet` directory to clean up, and close the console window. Since the worktree-remove must run from the main directory (not the worktree itself), use: `powershell.exe -Command "Start-Process powershell -ArgumentList '-Command', 'Set-Location C:\repos\daisinet; powershell -ExecutionPolicy Bypass -File C:\repos\daisinet\daisi\daisi-multi.ps1 worktree-remove <branch>'"` then exit the current session.
-- **"ship to main"** — Only allowed from the main worktree (`C:\repos\daisinet`) on the `dev` branch. Refuse if running from a feature worktree or not on `dev`. First pull all repos to get latest dev, then run `pr-dev-to-main` (which auto-merges). This promotes the current state of dev to main across all repos.
+- **"ship to main"** — Only allowed from the main worktree (`C:\repos\daisinet`) on the `dev` branch. Refuse if running from a feature worktree or not on `dev`. First pull all repos to get latest dev, then run `pr-dev-to-main` (which auto-merges). This promotes the current state of dev to main across all repos. IMPORTANT: Never delete the `dev` or `main` branches. When merging PRs for ship-to-main, do NOT use `--delete-branch`. The script already protects these branches, but never manually delete them either.
 
 ## Documentation Requirements
 
