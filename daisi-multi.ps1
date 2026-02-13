@@ -766,15 +766,16 @@ function Invoke-WorktreeAdd {
         Write-Host "Worktree ready at: $worktreeRoot" -ForegroundColor Green
 
         # Launch Claude Code in a new Windows Terminal tab
+        # Clear CLAUDECODE env var so the new session doesn't think it's nested
         try {
             $quotedPath = '"' + $worktreeRoot + '"'
-            Start-Process wt -ArgumentList "-d", $quotedPath, "claude" -ErrorAction Stop
+            Start-Process wt -ArgumentList "-d", $quotedPath, "powershell", "-NoExit", "-Command", "`$env:CLAUDECODE=`$null; claude" -ErrorAction Stop
             Write-Host "Launched Claude Code in new terminal at $worktreeRoot" -ForegroundColor Green
         }
         catch {
             # Fallback: open a new PowerShell window with claude
             try {
-                Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$worktreeRoot'; claude"
+                Start-Process powershell -ArgumentList "-NoExit", "-Command", "`$env:CLAUDECODE=`$null; Set-Location '$worktreeRoot'; claude"
                 Write-Host "Launched Claude Code in new PowerShell window at $worktreeRoot" -ForegroundColor Green
             }
             catch {
