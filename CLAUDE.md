@@ -2,7 +2,7 @@
 
 ## Multi-Repo Structure
 
-This project spans 10 git repos, all under `C:\repos\daisinet`:
+This project spans 11 git repos, all under `C:\repos\daisinet`:
 
 - `daisi` — solution root, shared config
 - `daisi-bot-dotnet` — bot engine and TUI
@@ -12,6 +12,7 @@ This project spans 10 git repos, all under `C:\repos\daisinet`:
 - `daisi-openai-dotnet` — OpenAI-compatible inference
 - `daisi-orc-dotnet` — orchestrator
 - `daisi-sdk-dotnet` — SDK and proto definitions
+- `daisi-sdk-typescript` — TypeScript SDK (`@daisi/sdk` npm package)
 - `daisi-tools-dotnet` — tools and skills
 - `daisi-web-public` — public website
 
