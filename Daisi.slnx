@@ -3,12 +3,16 @@
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Agent/DaisiBot.Agent.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Core/DaisiBot.Core.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Data/DaisiBot.Data.csproj" />
+    <Project Path="../daisi-bot-dotnet/src/DaisiBot.LocalTools/DaisiBot.LocalTools.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Maui/DaisiBot.Maui.csproj">
       <Deploy />
     </Project>
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Shared.UI/DaisiBot.Shared.UI.csproj" />
     <Project Path="../daisi-bot-dotnet/src/DaisiBot.Tui/DaisiBot.Tui.csproj" />
-    <Project Path="../daisi-bot-dotnet/src/DaisiBot.Web/DaisiBot.Web.csproj" />
+  </Folder>
+  <Folder Name="/Bot/Tests/">
+    <Project Path="../daisi-bot-dotnet/tests/DaisiBot.Agent.Tests/DaisiBot.Agent.Tests.csproj" />
+    <Project Path="../daisi-bot-dotnet/tests/DaisiBot.LocalTools.Tests/DaisiBot.LocalTools.Tests.csproj" />
   </Folder>
   <Folder Name="/Drive/">
     <Project Path="../daisi-drive-dotnet/Daisi.Drive.Core/Daisi.Drive.Core.csproj" />
@@ -19,6 +23,7 @@
   <Folder Name="/Hosts/">
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Console/Daisi.Host.Console.csproj" />
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Core/Daisi.Host.Core.csproj" />
+    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Tests/Daisi.Host.Tests.csproj" />
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Maui/Daisi.Host.Maui.csproj">
       <Deploy />
     </Project>
@@ -30,13 +35,23 @@
     <Project Path="../daisi-manager-dotnet/Daisi.Manager.Shared/Daisi.Manager.Shared.csproj" />
     <Project Path="../daisi-manager-dotnet/Daisi.Manager.Web/Daisi.Manager.Web.csproj" />
   </Folder>
+  <Folder Name="/OpenAI/">
+    <Project Path="../daisi-openai-dotnet/Daisi.OpenAI/Daisi.OpenAI.csproj" />
+  </Folder>
   <Folder Name="/Orc/">
     <Project Path="../daisi-orc-dotnet/Daisi.Functions.Cosmo/Daisi.Functions.CosmoDb.csproj" />
+    <Project Path="../daisi-orc-dotnet/Daisi.Integration.Tests/Daisi.Integration.Tests.csproj" />
     <Project Path="../daisi-orc-dotnet/Daisi.Orc.Core/Daisi.Orc.Core.csproj" />
     <Project Path="../daisi-orc-dotnet/Daisi.Orc.Grpc/Daisi.Orc.Grpc.csproj" />
     <Project Path="../daisi-orc-dotnet/Daisi.Orc.Tests/Daisi.Orc.Tests.csproj" />
   </Folder>
   <Folder Name="/SDK/">
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference/Daisi.Inference.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference.LlamaSharp/Daisi.Inference.LlamaSharp.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference.OnnxRuntime/Daisi.Inference.OnnxRuntime.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference.Piper/Daisi.Inference.Piper.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference.StableDiffusion/Daisi.Inference.StableDiffusion.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference.Whisper/Daisi.Inference.Whisper.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Razor/Daisi.SDK.Razor.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Tests/Daisi.SDK.Tests.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Web/Daisi.SDK.Web.csproj" />
