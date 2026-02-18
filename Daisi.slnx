@@ -23,10 +23,10 @@
   <Folder Name="/Hosts/">
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Console/Daisi.Host.Console.csproj" />
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Core/Daisi.Host.Core.csproj" />
-    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Tests/Daisi.Host.Tests.csproj" />
     <Project Path="../daisi-hosts-dotnet/Daisi.Host.Maui/Daisi.Host.Maui.csproj">
       <Deploy />
     </Project>
+    <Project Path="../daisi-hosts-dotnet/Daisi.Host.Tests/Daisi.Host.Tests.csproj" />
   </Folder>
   <Folder Name="/Manager/">
     <Project Path="../daisi-manager-dotnet/Daisi.Manager.Maui/Daisi.Manager.Maui.csproj">
@@ -46,12 +46,12 @@
     <Project Path="../daisi-orc-dotnet/Daisi.Orc.Tests/Daisi.Orc.Tests.csproj" />
   </Folder>
   <Folder Name="/SDK/">
-    <Project Path="../daisi-sdk-dotnet/Daisi.Inference/Daisi.Inference.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.Inference.LlamaSharp/Daisi.Inference.LlamaSharp.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.Inference.OnnxRuntime/Daisi.Inference.OnnxRuntime.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.Inference.Piper/Daisi.Inference.Piper.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.Inference.StableDiffusion/Daisi.Inference.StableDiffusion.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.Inference.Whisper/Daisi.Inference.Whisper.csproj" />
+    <Project Path="../daisi-sdk-dotnet/Daisi.Inference/Daisi.Inference.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Razor/Daisi.SDK.Razor.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Tests/Daisi.SDK.Tests.csproj" />
     <Project Path="../daisi-sdk-dotnet/Daisi.SDK.Web/Daisi.SDK.Web.csproj" />
@@ -63,5 +63,12 @@
   <Folder Name="/Tools/">
     <Project Path="../daisi-tools-dotnet/Daisi.Tools.csproj" />
     <Project Path="../daisi-tools-dotnet/Daisi.Tools.Tests/Daisi.Tools.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tools/Secure/">
+    <Project Path="../daisi-tools-dotnet/Daisi.SecureTools.Tests/Daisi.SecureTools.Tests.csproj" />
+    <Project Path="../daisi-tools-dotnet/Daisi.SecureTools/Daisi.SecureTools.csproj" />
+    <Project Path="../daisi-tools-dotnet/SecureToolProvider.Common/SecureToolProvider.Common.csproj" />
+    <Project Path="../daisi-tools-dotnet/SecureToolProvider.Tests/SecureToolProvider.Tests.csproj" />
+    <Project Path="../daisi-tools-dotnet/SecureToolProvider/SecureToolProvider.csproj" />
   </Folder>
 </Solution>
