@@ -14,6 +14,12 @@
     <Project Path="../daisi-bot-dotnet/tests/DaisiBot.Agent.Tests/DaisiBot.Agent.Tests.csproj" />
     <Project Path="../daisi-bot-dotnet/tests/DaisiBot.LocalTools.Tests/DaisiBot.LocalTools.Tests.csproj" />
   </Folder>
+  <Folder Name="/Dev/">
+    <Project Path="../daisi-dev-dotnet/src/DaisiDev.Agent/DaisiDev.Agent.csproj" />
+    <Project Path="../daisi-dev-dotnet/src/DaisiDev.Core/DaisiDev.Core.csproj" />
+    <Project Path="../daisi-dev-dotnet/src/DaisiDev.Data/DaisiDev.Data.csproj" />
+    <Project Path="../daisi-dev-dotnet/src/DaisiDev.Tui/DaisiDev.Tui.csproj" />
+  </Folder>
   <Folder Name="/Drive/">
     <Project Path="../daisi-drive-dotnet/Daisi.Drive.Core/Daisi.Drive.Core.csproj" />
     <Project Path="../daisi-drive-dotnet/Daisi.Drive.Service/Daisi.Drive.Service.csproj" />
