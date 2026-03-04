@@ -17,7 +17,6 @@ git clone https://github.com/daisinet/daisi-bot-dotnet.git daisi-bot-dotnet
 git clone https://github.com/daisinet/daisi-drive-dotnet.git daisi-drive-dotnet
 git clone https://github.com/daisinet/daisi-manager-dotnet.git daisi-manager-dotnet
 git clone https://github.com/daisinet/daisi-orc-dotnet.git daisi-orc-dotnet
-git clone https://github.com/daisinet/daisi-dotnet-console-chat.git daisi-dotnet-console-chat
 git clone https://github.com/daisinet/daisi-web-public.git daisi-web-public
 ```
 
