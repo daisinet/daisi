@@ -67,14 +67,14 @@
     <Project Path="../daisi-sdk-dotnet/Examples/Daisi.Console.Chat/Daisi.Console.Chat.csproj" />
   </Folder>
   <Folder Name="/Tools/">
-    <Project Path="../daisi-tools-dotnet/Daisi.Tools.csproj" />
+    <Project Path="../daisi-tools-dotnet/Daisi.Tools/Daisi.Tools.csproj" />
     <Project Path="../daisi-tools-dotnet/Daisi.Tools.Tests/Daisi.Tools.Tests.csproj" />
   </Folder>
   <Folder Name="/Tools/Secure/">
     <Project Path="../daisi-tools-dotnet/Daisi.SecureTools.Tests/Daisi.SecureTools.Tests.csproj" />
     <Project Path="../daisi-tools-dotnet/Daisi.SecureTools/Daisi.SecureTools.csproj" />
-    <Project Path="../daisi-tools-dotnet/SecureToolProvider.Common/SecureToolProvider.Common.csproj" />
-    <Project Path="../daisi-tools-dotnet/SecureToolProvider.Tests/SecureToolProvider.Tests.csproj" />
-    <Project Path="../daisi-tools-dotnet/SecureToolProvider/SecureToolProvider.csproj" />
+    <Project Path="../daisi-tools-dotnet/Daisi.SecureTools.Provider.Common/Daisi.SecureTools.Provider.Common.csproj" />
+    <Project Path="../daisi-tools-dotnet/Daisi.SecureTools.Provider.Tests/Daisi.SecureTools.Provider.Tests.csproj" />
+    <Project Path="../daisi-tools-dotnet/Daisi.SecureTools.Provider/Daisi.SecureTools.Provider.csproj" />
   </Folder>
 </Solution>
