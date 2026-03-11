@@ -56,14 +56,14 @@ function Get-MainBranch {
         if ($locals -contains 'main') { return 'main' }
         if ($locals -contains 'master') { return 'master' }
 
-        # Fallback: check origin/HEAD
-        $originHead = git symbolic-ref refs/remotes/origin/HEAD 2>$null
-        if ($originHead -match 'origin/(.+)$') { return $Matches[1] }
-
-        # Last resort: check remote branches
+        # Check remote branches
         $remotes = git branch -r --list 2>$null | ForEach-Object { $_.Trim() }
         if ($remotes -contains 'origin/main') { return 'main' }
         if ($remotes -contains 'origin/master') { return 'master' }
+
+        # Fallback: check origin/HEAD
+        $originHead = git symbolic-ref refs/remotes/origin/HEAD 2>$null
+        if ($originHead -match 'origin/(.+)$') { return $Matches[1] }
 
         return 'main'
     }
