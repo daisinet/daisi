@@ -9,6 +9,12 @@
 .PARAMETER crm
     Also start the Daisi Business CRM app.
 
+.PARAMETER booksmarts
+    Also start the Daisi BookSmarts app.
+
+.PARAMETER herald
+    Also start the Daisi Herald app.
+
 .PARAMETER public
     Also start the Daisi Web Public app.
 
@@ -17,12 +23,14 @@
     # Starts ORC, Host, and Manager
 
 .EXAMPLE
-    .\start-dev.ps1 -crm -public
-    # Starts all five services
+    .\start-dev.ps1 -crm -booksmarts -herald -public
+    # Starts all services
 #>
 
 param(
     [switch]$crm,
+    [switch]$booksmarts,
+    [switch]$herald,
     [switch]$public
 )
 
@@ -83,6 +91,20 @@ if ($crm) {
         -WorkingDirRel "daisi-business-crm/Daisi.Business.CRM"
 }
 
+if ($booksmarts) {
+    Start-DaisiApp -Name "Daisi BookSmarts" `
+        -ExeRelPath "daisi-business-booksmarts/BookSmarts.Web/bin/Debug/net10.0/BookSmarts.Web.exe" `
+        -Urls "https://localhost:7210;http://localhost:5210" `
+        -WorkingDirRel "daisi-business-booksmarts/BookSmarts.Web"
+}
+
+if ($herald) {
+    Start-DaisiApp -Name "Daisi Herald" `
+        -ExeRelPath "daisi-business-herald/Herald.Web/bin/Debug/net10.0/Herald.Web.exe" `
+        -Urls "https://localhost:7220;http://localhost:5220" `
+        -WorkingDirRel "daisi-business-herald/Herald.Web"
+}
+
 if ($public) {
     Start-DaisiApp -Name "Daisi Public" `
         -ExeRelPath "daisi-web-public/Daisi.Web.Public/bin/Debug/net10.0/Daisi.Web.Public.exe" `
@@ -98,6 +120,14 @@ Start-Process "https://localhost:7150"
 
 if ($crm) {
     Start-Process "https://localhost:7200"
+}
+
+if ($booksmarts) {
+    Start-Process "https://localhost:7210"
+}
+
+if ($herald) {
+    Start-Process "https://localhost:7220"
 }
 
 if ($public) {
