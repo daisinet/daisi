@@ -2,20 +2,7 @@
 
 ## Multi-Repo Structure
 
-This project spans 12 git repos, all under `C:\repos\daisinet`:
-
-- `daisi` — solution root, shared config
-- `daisi-bot-dotnet` — bot engine and TUI
-- `daisi-dev-dotnet` — developer tools and testing
-- `daisi-drive-dotnet` — Drive storage
-- `daisi-hosts-dotnet` — host runtime
-- `daisi-manager-dotnet` — admin/manager web UI
-- `daisi-openai-dotnet` — OpenAI-compatible inference
-- `daisi-orc-dotnet` — orchestrator
-- `daisi-sdk-dotnet` — SDK and proto definitions
-- `daisi-sdk-typescript` — TypeScript SDK (`@daisi/sdk` npm package)
-- `daisi-tools-dotnet` — tools and skills
-- `daisi-web-public` — public website
+This project spans multiple git repos, all under `C:\repos\daisinet`. The full list is whatever `daisi-multi.ps1 status` reports — repos are added over time.
 
 All repos use `main` as the default branch and `dev` as the integration branch.
 
@@ -38,46 +25,38 @@ Use `daisi\daisi-multi.ps1` for any operation that should apply across multiple 
 
 ### When to use this script
 
-- **Starting a new feature**: when the user asks to work on a new feature or create a new branch, always use `worktree-add <branch>` to create a parallel working copy at `C:\repos\daisinet-<branch>`. This keeps the main directory on `dev` and opens a new Claude console for the feature work automatically. Never switch the main directory off `dev`.
-- **Before starting work**: run `status` to see the state of all repos.
-- **Pushing and PRs**: use `push`, `pr-create`, and `pr-merge` to batch operations instead of doing them one repo at a time.
+- **Starting a new feature**: always use `worktree-add <branch>` to create a parallel working copy at `C:\repos\daisinet-<branch>`. Never switch the main directory off `dev`.
+- **Pushing and PRs**: use `push`, `pr-create`, and `pr-merge` to batch operations.
 - **Releasing**: use `pr-dev-to-main` to promote dev to main across all repos.
-- **Cleaning up**: use `worktree-remove <branch>` after a feature is merged to clean up the worktree directory.
+- **Cleaning up**: use `worktree-remove <branch>` after a feature is merged.
 
 ### User Shortcuts
 
-- **"ship to dev"** — For each repo that has uncommitted changes: stage and commit with a descriptive message, then run `push` across all repos, then run `pr-create` (which auto-merges). This ships the current feature branch back to dev.
-- **"closeout this feature"** — Do everything in "ship to dev", then determine the current branch name, run `worktree-remove <branch>` from the main `C:\repos\daisinet` directory to clean up, and close the console window. Since the worktree-remove must run from the main directory (not the worktree itself), use: `powershell.exe -Command "Start-Process powershell -ArgumentList '-Command', 'Set-Location C:\repos\daisinet; powershell -ExecutionPolicy Bypass -File C:\repos\daisinet\daisi\daisi-multi.ps1 worktree-remove <branch>'"` then exit the current session.
-- **"ship to main"** — Only allowed from the main worktree (`C:\repos\daisinet`) on the `dev` branch. Refuse if running from a feature worktree or not on `dev`. First pull all repos to get latest dev, then run `pr-dev-to-main` (which auto-merges). This promotes the current state of dev to main across all repos. IMPORTANT: Never delete the `dev` or `main` branches. When merging PRs for ship-to-main, do NOT use `--delete-branch`. The script already protects these branches, but never manually delete them either.
-- **"release to production|beta|group1|group2"** — Releases build from `main`, so always ship dev to main first, and always verify the build compiles before releasing. Steps:
-  1. Run `pr-dev-to-main -DryRun` to check if dev is ahead of main in any repo. If it is, run `pr-dev-to-main` (without `-DryRun`) to merge dev into main across all repos before releasing.
-  2. Build the solution locally (`dotnet build`) to verify it compiles. Fix any errors before proceeding — do not release broken code.
-  3. Generate a timestamp version: `powershell.exe -Command "Get-Date -Format 'yyyy.MM.dd.HHmm'"`
-  3. Dispatch the workflow: `gh workflow run orchestrate-release.yml --repo daisinet/daisi-orc-dotnet --ref main -f version=<version> -f release_group=<group> -f activate=true -f release_notes="<notes>"`
-  4. Wait ~15 seconds, then confirm it started: `gh run list --repo daisinet/daisi-orc-dotnet --workflow orchestrate-release.yml --limit 1 --json status,url`
-  5. Report the run URL to the user so they can monitor progress.
+- **"ship to dev"** — For each repo with uncommitted changes: stage and commit with a descriptive message, then `push`, then `pr-create` (which auto-merges).
+- **"closeout this feature"** — Do "ship to dev", then run `worktree-remove <branch>` from the main `C:\repos\daisinet` directory and close the console. Use: `powershell.exe -Command "Start-Process powershell -ArgumentList '-Command', 'Set-Location C:\repos\daisinet; powershell -ExecutionPolicy Bypass -File C:\repos\daisinet\daisi\daisi-multi.ps1 worktree-remove <branch>'"` then exit.
+- **"ship to main"** — Only from main worktree on `dev`. Pull all repos, then `pr-dev-to-main`. Never delete `dev` or `main` branches. Never use `--delete-branch`.
+- **"start the dev env"** — Start ORC (HTTPS, port 5001), Host (HTTPS), and optionally a UI project if relevant to current work.
+- **"release to production|beta|group1|group2"** — Ship dev to main first, verify the build compiles, generate a timestamp version, then dispatch `orchestrate-release.yml` via `gh workflow run`.
 
-## Documentation Requirements
+### Running Tests
 
-After every coding task, always update the relevant documentation before considering the work done. This is not optional.
-
-### What to update
-
-- **README files**: Every repo has a README. When you change a repo's public API, add a feature, or change behavior, update that repo's README to reflect the changes.
-- **Learn section** (`daisi-web-public`): The public website at `Components/Pages/Learn/` contains how-to guides and reference material. When SDK APIs, tools, host capabilities, bot features, or other user-facing functionality changes, add or update the relevant Learn pages so users can discover and understand the new functionality.
-- **SDK reference**: When proto definitions, client APIs, or service contracts change in `daisi-sdk-dotnet`, update the SDK documentation and any Learn pages that reference those APIs.
-- **Inline docs**: Add XML doc comments to new public classes and methods in C# code.
-
-### Principles
-
-- Documentation should be evergreen — always growing, never stale. Every feature ships with docs.
-- Write for someone who hasn't seen the codebase. Explain what it does and how to use it, not just what changed.
-- If a feature spans multiple repos (e.g. new proto in SDK + new RPC in ORC + new UI in Manager), update docs in all affected repos.
-- When in doubt, add a Learn page. Short guides are better than no guides.
+When asked to "run all tests":
+1. **Unit tests**: All `*Tests.csproj` projects in the solution.
+2. **Integration tests**: Start dev env (ORC + Host), then run `daisi-sdk-dotnet/Daisi.SDK.Tests`.
+3. **Tools tests**: Only if a GGUF model exists in `C:\GGUFS`.
 
 ### Important flags
 
-- **`-DryRun`**: Always use this first for mutating commands (`branch`, `push`, `pr-create`, `pr-merge`, `pr-dev-to-main`) to preview what will happen before executing.
-- **`-Repos`**: Filter to specific repos, e.g. `-Repos daisi-sdk-dotnet,daisi-orc-dotnet`.
-- **`-Base`**: Override the base branch for PR operations (default: `dev`).
-- **`-MergeStrategy`**: Choose `merge`, `squash`, or `rebase` for `pr-merge` (default: `merge`).
+- **`-DryRun`**: Use for `pr-dev-to-main` to preview before executing.
+- **`-Repos`**: Filter to specific repos.
+- **`-Base`**: Override base branch for PR operations (default: `dev`).
+- **`-MergeStrategy`**: `merge`, `squash`, or `rebase` (default: `merge`).
+
+## Documentation Requirements
+
+After every coding task, update relevant documentation. This is not optional.
+
+- **README files**: Update when you change a repo's API, add a feature, or change behavior.
+- **Learn section** (`daisi-web-public/Components/Pages/Learn/`): Update when user-facing functionality changes.
+- **SDK reference**: Update when proto definitions, client APIs, or service contracts change.
+- **Inline docs**: Add XML doc comments to new public classes and methods.
