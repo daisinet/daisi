@@ -101,7 +101,7 @@ if ($booksmarts) {
 if ($herald) {
     Start-DaisiApp -Name "Daisi Herald" `
         -ExeRelPath "daisi-business-herald/Herald.Web/bin/Debug/net10.0/Herald.Web.exe" `
-        -Urls "https://localhost:7220;http://localhost:5220" `
+        -Urls "https://localhost:7300;http://localhost:5300" `
         -WorkingDirRel "daisi-business-herald/Herald.Web"
 }
 
@@ -127,7 +127,7 @@ if ($booksmarts) {
 }
 
 if ($herald) {
-    Start-Process "https://localhost:7220"
+    Start-Process "https://localhost:7300"
 }
 
 if ($public) {
